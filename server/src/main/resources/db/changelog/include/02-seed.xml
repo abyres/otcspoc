@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <!--INSERT SEED/DEFAULT VALUE-->
+
+    <property name="defaultSystemId"                    value="00000000-0000-0000-0000-000000000100"/>
+    <property name="defaultClientId"                    value="00000000-0000-0000-0000-000000001000"/>
+    <property name="defaultLocationId"                  value="1f438a80-b0df-4342-9c37-3367473aefc0"/>
+    <property name="defaultUserId"                      value="8a25b1fa-36cc-42fe-8195-dab9fd4f3784"/>
+    <property name="defaultPurchasePricelistId"         value="b1e76d5c-e7a3-11e7-8ca8-f01faf1a6a09"/>
+    <property name="defaultSalesPricelistId"            value="b1e7a0ba-e7a3-11e7-8ca8-f01faf1a6a09"/>
+
+    <changeSet id="system_user" author="onn">
+        <insert tableName="a_user">
+            <column name="a_user_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="username" value="System User"/>
+            <column name="email" value="system@juviabos.local"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="default_org" author="onn">
+        <insert tableName="a_org">
+            <column name ="a_org_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="Default"/>
+            <column name="name" value="Default Organization"/>
+            <column name="description" value="System generated organization"/>
+            <column name="a_location_id" value="${defaultSystemId}"/>
+            <column name="taxid" value="**NOT DEFINED**"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="default_location" author="onn">
+        <insert tableName="a_location">
+            <column name="a_location_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="address1" value="**NOT DEFINED**"/>
+            <column name="city" value="**NOT DEFINED**"/>
+            <column name="postal" value="**0000**"/>
+            <column name="country" value="**NOT DEFINED**"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="default_bpartner_category" author="onn">
+        <insert tableName="a_bpartner_category">
+            <column name="a_bpartner_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="Default"/>
+            <column name="name" value="Default"/>
+            <column name="description" value="System generated business partner category"/>
+            <column name="is_default" value="Y"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="default_tax_category" author="onn">
+        <insert tableName="a_tax_category">
+            <column name="a_tax_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="Default"/>
+            <column name="name" value="Default Tax Category"/>
+            <column name="description" value="System generated tax category"/>
+            <column name="is_default" value="Y"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="default_tax" author="onn">
+        <insert tableName="a_tax">
+            <column name="a_tax_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="Default"/>
+            <column name="name" value="Default Tax"/>
+            <column name="description" value="System generated business tax"/>
+            <column name="is_default" value="Y"/>
+            <column name="a_tax_category_id" value="${defaultSystemId}"/>
+            <column name="rate" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="default_product_category" author="onn">
+        <insert tableName="a_product_category">
+            <column name="a_product_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="Default"/>
+            <column name="name" value="Default product category"/>
+            <column name="description" value="System generated product category"/>
+            <column name="is_default" value="Y"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="default_product" author="onn">
+        <insert tableName="a_product">
+            <column name="a_product_id" value="${defaultSystemId}"/>
+            <column name="a_product_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="Default"/>
+            <column name="name" value="Default product"/>
+            <column name="description" value="System generated product"/>
+            <column name="uom" value="EA"/>
+            <column name="a_product_category_id" value="${defaultSystemId}"/>
+            <column name="a_tax_category_id" value="${defaultSystemId}"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

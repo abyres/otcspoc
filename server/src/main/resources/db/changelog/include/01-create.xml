@@ -1,0 +1,1216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--    <preConditions>
+         These changes should only be run against a schema with major version 0
+        <sqlCheck expectedResult="0">
+            SELECT NVL(MAX(id),0)
+            FROM databasechangelog
+            WHERE author='MajorVersion'
+        </sqlCheck>
+    </preConditions>-->
+    <changeSet id="create_bpartner_category" author="onn">
+        <createTable tableName="a_bpartner_category">
+            <column name="a_bpartner_category_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="is_default" type="VARCHAR(1)" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+
+            <!--
+            ad_client_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            ad_org_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_bpartner" author="onn">
+        <createTable tableName="a_bpartner">
+            <column name="a_bpartner_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="a_bpartner_category_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="taxid" type="VARCHAR(20)"/>
+            <!--Discriminator B=Normal Biz Partner, E=Employee-->
+            <column name="bptype" type="VARCHAR(3)" defaultValue="B">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datejoined" type="TIMESTAMP"/>
+            <!--
+            ad_client_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            ad_org_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            name2 character varying(60) COLLATE pg_catalog."default",
+            issummary character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            c_bp_group_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            isonetime character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            isprospect character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            isvendor character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            iscustomer character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            isemployee character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            issalesrep character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            referenceno character varying(40) COLLATE pg_catalog."default",
+            duns character(11) COLLATE pg_catalog."default",
+            url character varying(120) COLLATE pg_catalog."default",
+            ad_language character varying(6) COLLATE pg_catalog."default",
+            istaxexempt character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            c_invoiceschedule_id character varying(32) COLLATE pg_catalog."default",
+            rating character(1) COLLATE pg_catalog."default",
+            salesvolume numeric(10,0),
+            numberemployees numeric(10,0),
+            naics character(6) COLLATE pg_catalog."default",
+            firstsale timestamp without time zone,
+            acqusitioncost numeric DEFAULT 0,
+            potentiallifetimevalue numeric DEFAULT 0,
+            actuallifetimevalue numeric DEFAULT 0,
+            shareofcustomer numeric(10,0),
+            paymentrule character varying(60) COLLATE pg_catalog."default",
+            so_creditlimit numeric DEFAULT 0,
+            so_creditused numeric DEFAULT 0,
+            c_paymentterm_id character varying(32) COLLATE pg_catalog."default",
+            m_pricelist_id character varying(32) COLLATE pg_catalog."default",
+            isdiscountprinted character(1) COLLATE pg_catalog."default" DEFAULT 'Y'::bpchar,
+            so_description character varying(255) COLLATE pg_catalog."default",
+            poreference character varying(20) COLLATE pg_catalog."default",
+            paymentrulepo character varying(60) COLLATE pg_catalog."default",
+            po_pricelist_id character varying(32) COLLATE pg_catalog."default",
+            po_paymentterm_id character varying(32) COLLATE pg_catalog."default",
+            documentcopies numeric(10,0),
+            c_greeting_id character varying(32) COLLATE pg_catalog."default",
+            invoicerule character varying(60) COLLATE pg_catalog."default",
+            deliveryrule character varying(60) COLLATE pg_catalog."default",
+            deliveryviarule character varying(60) COLLATE pg_catalog."default",
+            salesrep_id character varying(32) COLLATE pg_catalog."default",
+            bpartner_parent_id character varying(32) COLLATE pg_catalog."default",
+            socreditstatus character varying(60) COLLATE pg_catalog."default" DEFAULT 'O'::character varying,
+            ad_forced_org_id character varying(32) COLLATE pg_catalog."default",
+            showpriceinorder character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            invoicegrouping character varying(60) COLLATE pg_catalog."default",
+            fixmonthday numeric(10,0),
+            fixmonthday2 numeric(10,0),
+            fixmonthday3 numeric(10,0),
+            isworker character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            upc character varying(30) COLLATE pg_catalog."default",
+            c_salary_category_id character varying(32) COLLATE pg_catalog."default",
+            invoice_printformat character varying(60) COLLATE pg_catalog."default",
+            last_days numeric(10,0),
+            po_bankaccount_id character varying(32) COLLATE pg_catalog."default",
+            po_bp_taxcategory_id character varying(32) COLLATE pg_catalog."default",
+            po_fixmonthday numeric(10,0),
+            po_fixmonthday2 numeric(10,0),
+            po_fixmonthday3 numeric(10,0),
+            so_bankaccount_id character varying(32) COLLATE pg_catalog."default",
+            so_bp_taxcategory_id character varying(32) COLLATE pg_catalog."default",
+            fiscalcode character varying(16) COLLATE pg_catalog."default",
+            isofiscalcode character varying(2) COLLATE pg_catalog."default",
+            po_c_incoterms_id character varying(32) COLLATE pg_catalog."default",
+            so_c_incoterms_id character varying(32) COLLATE pg_catalog."default",
+            fin_paymentmethod_id character varying(32) COLLATE pg_catalog."default",
+            po_paymentmethod_id character varying(32) COLLATE pg_catalog."default",
+            fin_financial_account_id character varying(32) COLLATE pg_catalog."default",
+            po_financial_account_id character varying(32) COLLATE pg_catalog."default",
+            customer_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            vendor_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            so_payment_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            po_payment_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            so_invoice_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            po_invoice_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            so_order_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            po_order_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            so_goods_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            po_goods_blocking character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            iscashvat character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            update_currency character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            bp_currency_id character varying(32) COLLATE pg_catalog."default",-->
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_location" author="onn">
+        <createTable tableName="a_location">
+            <column name="a_location_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address1" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address2" type="VARCHAR(150)"/>
+            <column name="city" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postal" type="VARCHAR(10)"/>
+            <column name="region" type="VARCHAR(150)"/>
+            <column name="country" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_org" author="onn">
+        <createTable tableName="a_org">
+            <column name="a_org_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="a_location_id" type="VARCHAR(36)"/>
+            <column name="taxid" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_pricelist" author="onn">
+        <createTable tableName="a_pricelist">
+            <column name="a_pricelist_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="is_taxincluded" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <!--
+            ad_client_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            ad_org_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            basepricelist_id character varying(32) COLLATE pg_catalog."default",
+            issopricelist character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            isdefault character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            c_currency_id character varying(32) COLLATE pg_catalog."default" NOT NULL,-->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_product_category" author="onn">
+        <createTable tableName="a_product_category">
+            <column name="a_product_category_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="is_default" type="VARCHAR(1)" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+            <!--
+            ad_client_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            ad_org_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            plannedmargin numeric NOT NULL,
+            a_asset_group_id character varying(32) COLLATE pg_catalog."default",
+            em_cc_expense_type character varying(60) COLLATE pg_catalog."default" NOT NULL DEFAULT 'DI'::character varying,
+            ad_image_id character varying(32) COLLATE pg_catalog."default",
+            issummary character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_product" author="onn">
+        <createTable tableName="a_product">
+            <column name="a_product_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name2" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="upc" type="VARCHAR(30)"/>
+            <column name="uom" type="VARCHAR(10)" defaultValue="EA">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_product_category_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_tax_category_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_discontinued" type="VARCHAR(1)" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discontinuedby" type="TIMESTAMP"/>
+            <column name="processing" type="VARCHAR(1)" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_productprice" author="onn">
+        <createTable tableName="a_productprice">
+            <column name="a_productprice_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="a_pricelist_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pricelist" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pricestd" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cost" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <!--
+            ad_client_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            ad_org_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            pricelimit numeric NOT NULL DEFAULT 0,
+            -->
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_tax_category" author="onn">
+        <createTable tableName="a_tax_category">
+            <column name="a_tax_category_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="is_default" type="VARCHAR(1)" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+
+            <!--            ad_client_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            ad_org_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            asbom character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,-->
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_tax" author="onn">
+        <createTable tableName="a_tax">
+            <column name="a_tax_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="a_parenttax_id" type="VARCHAR(36)"/>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_tax_category_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="validfrom" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_default" type="VARCHAR(1)" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+            <!--
+            ad_client_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            ad_org_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            taxindicator character varying(5) COLLATE pg_catalog."default",
+            issummary character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            c_country_id character varying(32) COLLATE pg_catalog."default",
+            c_region_id character varying(32) COLLATE pg_catalog."default",
+            to_country_id character varying(32) COLLATE pg_catalog."default",
+            to_region_id character varying(32) COLLATE pg_catalog."default",
+            c_taxcategory_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            istaxexempt character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            sopotype character varying(60) COLLATE pg_catalog."default" NOT NULL DEFAULT 'B'::character varying,
+            cascade character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            c_bp_taxcategory_id character varying(32) COLLATE pg_catalog."default",
+            line numeric,
+            iswithholdingtax character(1) COLLATE pg_catalog."default",
+            isnotaxable character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            deducpercent numeric(10,0),
+            originalrate numeric(10,0),
+            istaxundeductable character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            istaxdeductable character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            isnovat character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            baseamount character varying(60) COLLATE pg_catalog."default" NOT NULL DEFAULT 'LNA'::character varying,
+            c_taxbase_id character varying(32) COLLATE pg_catalog."default",
+            doctaxamount character varying(60) COLLATE pg_catalog."default" NOT NULL DEFAULT 'D'::character varying,
+            -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_user" author="onn">
+        <createTable tableName="a_user">
+            <column name="a_user_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(40)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(40)"/>
+            <column name="firstname" type="VARCHAR(60)"/>
+            <column name="lastname" type="VARCHAR(60)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id = "create_invoice" author="onn">
+        <createTable tableName = "c_invoice">
+            <column name="c_invoice_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="documentno" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="docstatus" type="VARCHAR(3)">
+                <!--enum DR = 'Draft', CO = 'Complete', VO = 'Void' -->
+                <constraints nullable="false"/>
+            </column>
+            <column name="docaction" type="VARCHAR(10)">
+                <!-- Workflow, next possible action for this document
+                possible value DR = 'Draft', CO = 'Complete', VO = 'Void'-->
+                <constraints nullable="false"/>
+            </column>
+            <column name="processing" type="VARCHAR(1)" defaultValue="N">
+                <!-- Processing lock -->
+                <constraints nullable="false"/>
+            </column>
+            <column name="doctype" type="VARCHAR(3)">
+                <!--Type of Order
+                enum SO=Standard Order, WH=Warehouse Order, etc -->
+                <constraints nullable="false"/>
+            </column>
+            <!--            posted character varying(60) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::character varying,
+            c_order_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            description character varying(4000) COLLATE pg_catalog."default",
+            isprinted character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            salesrep_id type="VARCHAR(36)" COLLATE pg_catalog."default",-->
+            <column name="dateinvoiced" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_bpartner_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_bpartner_location_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dateordered" type="TIMESTAMP"/>
+            <column name="poreferenceE" type="VARCHAR(36)"/>
+            <column name="nettotallines" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="grosstotal" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_pricelist_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <!--            dateprinted timestamp without time zone,
+            isdiscountprinted character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            c_currency_id type="VARCHAR(36)" COLLATE pg_catalog."default" NOT NULL,
+            paymentrule character varying(60) COLLATE pg_catalog."default",
+            c_paymentterm_id type="VARCHAR(36)" COLLATE pg_catalog."default" NOT NULL,
+            c_charge_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            chargeamt numeric DEFAULT 0,
+            istaxincluded character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            c_campaign_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_project_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_activity_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            createfrom character(1) COLLATE pg_catalog."default",
+            generateto character(1) COLLATE pg_catalog."default",
+            ad_user_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            isselfservice character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            ad_orgtrx_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            user1_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            user2_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            withholdingamount numeric,
+            taxdate timestamp without time zone,
+            c_withholding_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            ispaid character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            totalpaid numeric NOT NULL DEFAULT 0,
+            outstandingamt numeric NOT NULL DEFAULT 0,
+            daystilldue numeric NOT NULL DEFAULT 0,
+            dueamt numeric NOT NULL DEFAULT 0,
+            lastcalculatedondate timestamp without time zone,
+            updatepaymentmonitor character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            fin_paymentmethod_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            fin_payment_priority_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            finalsettlement timestamp without time zone,
+            daysoutstanding numeric,
+            percentageoverdue numeric,
+            c_costcenter_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            calculate_promotions character varying(1) COLLATE pg_catalog."default",
+            a_asset_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            iscashvat character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            prepaymentamt numeric NOT NULL DEFAULT 0,-->
+        </createTable>
+
+        <createTable tableName = "c_invoiceline">
+            <column name="c_invoiceline_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="c_invoice_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="c_orderline_id" type="VARCHAR(36)"/>
+            <column name="line" type="NUMERIC(10,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="notes" type="VARCHAR(4000)"/>
+            <column name="a_product_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="qtyinvoiced" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pricelist" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priceactual" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="linenetamt" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="linegrossamt" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_tax_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <!--            c_charge_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            chargeamt numeric DEFAULT 0,
+            c_uom_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            s_resourceassignment_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            m_attributesetinstance_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            isdescription character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            quantityorder numeric,
+            m_product_uom_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_invoice_discount_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_projectline_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            m_offer_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            pricestd numeric NOT NULL DEFAULT 0,
+            excludeforwithholding character(1) COLLATE pg_catalog."default",
+            taxbaseamt numeric,
+            gross_unit_price numeric DEFAULT 0,
+            c_bpartner_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            periodnumber numeric,
+            grosspricestd numeric NOT NULL DEFAULT 0,
+            a_asset_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            defplantype character varying(60) COLLATE pg_catalog."default",
+            grosspricelist numeric NOT NULL DEFAULT 0,
+            c_project_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            isdeferred character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            c_period_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_costcenter_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            user1_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            user2_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            explode character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            bom_parent_id type="VARCHAR(36)" COLLATE pg_catalog."default",-->
+        </createTable>
+    </changeSet>
+    <changeSet id="create_invoicetax" author="onn">
+        <createTable tableName="c_invoicetax">
+            <column name="c_invoicetax_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="c_invoice_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="line" type="NUMERIC(10,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_tax_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="taxbaseamt" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="taxamt" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <!--
+            ad_client_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            ad_org_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+            recalculate character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_order" author="onn">
+        <createTable tableName="c_order">
+            <column name="c_order_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="documentno" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="docstatus" type="VARCHAR(3)">
+                <!--enum DR = 'Draft', CO = 'Complete', VO = 'Void' -->
+                <constraints nullable="false"/>
+            </column>
+            <column name="docaction" type="VARCHAR(10)">
+                <!-- Workflow, next possible action for this document
+                possible value DR = 'Draft', CO = 'Complete', VO = 'Void'-->
+                <constraints nullable="false"/>
+            </column>
+            <column name="processing" type="VARCHAR(1)" defaultValue="N">
+                <!-- Processing lock -->
+                <constraints nullable="false"/>
+            </column>
+            <column name="doctype" type="VARCHAR(3)">
+                <!--Type of Order
+                enum SO=Standard Order, WH=Warehouse Order, etc -->
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="notes" type="VARCHAR(4000)"/>
+            <column name="is_delivered" type="VARCHAR(1)" defaultValue="N">
+                <!--Job done status -->
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_invoiced" type="VARCHAR(1)" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_printed" type="VARCHAR(1)" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salesrep_id" type="VARCHAR(36)" />
+            <column name="dateordered" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datepromised" type="TIMESTAMP"/>
+            <column name="dateprinted" type="TIMESTAMP"/>
+            <column name="a_bpartner_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="billto_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shipto_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="poreference" type="VARCHAR(20)"/>
+            <column name="a_bpartner_location_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="m_pricelist_id" type="VARCHAR(36)" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="nettotalline" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="taxtotalline" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="grosstotal" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <!--
+            isdiscountprinted character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+            c_currency_id type="VARCHAR(36)" COLLATE pg_catalog."default" NOT NULL,
+            paymentrule character varying(60) COLLATE pg_catalog."default" NOT NULL,
+            c_paymentterm_id type="VARCHAR(36)" COLLATE pg_catalog."default" NOT NULL,
+            invoicerule character varying(60) COLLATE pg_catalog."default" NOT NULL,
+            deliveryrule character varying(60) COLLATE pg_catalog."default" NOT NULL,
+            freightcostrule character varying(60) COLLATE pg_catalog."default" NOT NULL,
+            freightamt numeric DEFAULT 0,
+            deliveryviarule character varying(60) COLLATE pg_catalog."default" NOT NULL,
+            c_charge_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            chargeamt numeric DEFAULT 0,
+            priorityrule character varying(60) COLLATE pg_catalog."default" NOT NULL,
+            m_warehouse_id type="VARCHAR(36)" COLLATE pg_catalog."default" NOT NULL,
+            istaxincluded character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            c_campaign_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_project_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_activity_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            posted character varying(60) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::character varying,
+            ad_user_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            copyfrom character(1) COLLATE pg_catalog."default",
+            dropship_bpartner_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            dropship_location_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            dropship_user_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            isselfservice character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            ad_orgtrx_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            user1_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            user2_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            deliverynotes character varying(2000) COLLATE pg_catalog."default",
+            c_incoterms_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            incotermsdescription character varying(255) COLLATE pg_catalog."default",
+            generatetemplate character(1) COLLATE pg_catalog."default",
+            validuntil timestamp without time zone,
+            delivery_location_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            copyfrompo character(1) COLLATE pg_catalog."default",
+            fin_paymentmethod_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            fin_payment_priority_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            rm_pickfromshipment character(1) COLLATE pg_catalog."default",
+            rm_receivematerials character(1) COLLATE pg_catalog."default",
+            rm_createinvoice character varying(60) COLLATE pg_catalog."default",
+            c_return_reason_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            rm_addorphanline character(1) COLLATE pg_catalog."default",
+            a_asset_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            calculate_promotions character varying(1) COLLATE pg_catalog."default",
+            c_costcenter_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            convertquotation character(1) COLLATE pg_catalog."default",
+            c_reject_reason_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            quotation_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            so_res_status character varying(60) COLLATE pg_catalog."default",
+            create_polines character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            iscashvat character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            rm_pickfromreceipt character(1) COLLATE pg_catalog."default",
+            cancelandreplace character(1) COLLATE pg_catalog."default",
+            confirmcancelandreplace character(1) COLLATE pg_catalog."default",
+            cancelledorder_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            replacedorder_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            iscancelled character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            replacementorder_id type="VARCHAR(36)" COLLATE pg_catalog."default",-->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_orderline" author="onn">
+        <createTable tableName="c_orderline">
+            <column name="c_orderline_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="c_order_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="line" type="NUMERIC(10,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dateordered" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datepromised" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datedelivered" type="TIMESTAMP"/>
+            <column name="dateinvoiced" type="TIMESTAMP"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="notes" type="VARCHAR(4000)"/>
+            <column name="a_product_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_tax_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="qtyordered" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="qtyinvoiced" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="qtydelivered" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pricelist" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="netprices" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="taxpricelist" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="linenetamt" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="linetaxamt" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <!--            ,
+                        c_bpartner_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_bpartner_location_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            m_warehouse_id type="VARCHAR(36)" COLLATE pg_catalog."default" NOT NULL,
+            directship character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            c_uom_id type="VARCHAR(36)" COLLATE pg_catalog."default" NOT NULL,
+            qtyreserved numeric NOT NULL DEFAULT 0,
+            m_shipper_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_currency_id type="VARCHAR(36)" COLLATE pg_catalog."default" NOT NULL,
+            pricelimit numeric NOT NULL DEFAULT 0,
+            discount numeric,
+            freightamt numeric NOT NULL DEFAULT 0,
+            c_charge_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            chargeamt numeric DEFAULT 0,
+            s_resourceassignment_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            ref_orderline_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            m_attributesetinstance_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            isdescription character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            quantityorder numeric,
+            m_product_uom_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            m_offer_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            pricestd numeric NOT NULL DEFAULT 0,
+            cancelpricead character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            c_order_discount_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            iseditlinenetamt character(1) COLLATE pg_catalog."default" DEFAULT 'N'::bpchar,
+            taxbaseamt numeric,
+            m_inoutline_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            c_return_reason_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            gross_unit_price numeric DEFAULT 0,
+            grosspricelist numeric,
+            line_gross_amount numeric DEFAULT 0,
+            c_costcenter_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            grosspricestd numeric NOT NULL DEFAULT 0,
+            a_asset_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            m_warehouse_rule_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            user1_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            quotationline_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            user2_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            create_reservation character varying(60) COLLATE pg_catalog."default",
+            c_project_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            so_res_status character varying(60) COLLATE pg_catalog."default",
+            manage_reservation character(1) COLLATE pg_catalog."default",
+            manage_prereservation character(1) COLLATE pg_catalog."default",
+            explode character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            bom_parent_id type="VARCHAR(36)" COLLATE pg_catalog."default",
+            print_description character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            overdue_return_days numeric,
+            relate_orderline character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
+            replacedorderline_id type="VARCHAR(36)" COLLATE pg_catalog."default",-->
+        </createTable>
+    </changeSet>
+
+    <!--List of product that can be used as payroll element.-->
+    <changeSet id="create_payroll_element" author="onn">
+        <createTable tableName="a_payroll_element">
+            <column name="a_payroll_element_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="valid_from" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_product_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="line" type="NUMERIC(10,0)">
+                <constraints nullable="false"/>
+            </column>
+            <!--Y = Income for employee, N = Not income for employee-->
+            <column name="is_income" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--Payroll element configuration for (per) staff.-->
+    <changeSet id="create_employee_payroll_element" author="onn">
+        <createTable tableName="a_employee_payroll_element">
+            <column name="a_employee_payroll_element_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="a_payroll_element_id" type="VARCHAR(36)">
+                <constraints nullable="false" />
+            </column>
+            <column name="a_bpartner_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valid_from" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <!--List of product subject to ONLY those defined in A_PAYROLLELEMENT-->
+            <column name="a_product_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="line" type="NUMERIC(10,0)">
+                <constraints nullable="false"/>
+            </column>
+            <!--Y = Income for employee, N = Not income for employee-->
+            <column name="is_income" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+     <!--Worksheet for payroll processing.-->
+    <changeSet id="create_worksheet" author="onn">
+        <createTable tableName="c_worksheet">
+            <column name="c_worksheet_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="date_processed" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--Payroll element configuration for (per) staff.-->
+    <changeSet id="create_worksheet_line" author="onn">
+        <createTable tableName="c_worksheet_line">
+            <column name="c_worksheet_line_id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="c_worksheet_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="a_payroll_element_id" type="VARCHAR(36)">
+                <constraints nullable="false" />
+            </column>
+            <column name="a_bpartner_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedby" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <!--List of product subject to ONLY those defined in A_PAYROLLELEMENT-->
+            <column name="a_product_id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="line" type="NUMERIC(10,0)">
+                <constraints nullable="false"/>
+            </column>
+            <!--Y = Income for employee, N = Not income for employee-->
+            <column name="is_income" type="VARCHAR(1)" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="NUMERIC" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

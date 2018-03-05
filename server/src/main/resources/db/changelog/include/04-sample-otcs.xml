@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet id="employee_1" author="onn">
+        <insert tableName="a_bpartner">
+            <column name="a_bpartner_id" value="0933f786-2054-11e8-9015-b8763f88c3e3"/>
+            <column name="a_bpartner_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="MGT0001"/>
+            <column name="name" value="Hendrik Ebbers"/>
+            <column name="description" value="Member and Java champions Blog at @guigarage - Loves Star Wars"/>
+            <column name="taxid" value="00110013412-GM"/>
+            <column name="bptype" value="E"/>
+            <column name="datejoined" value="2017-05-17"/>
+        </insert>
+        <insert tableName="a_bpartner">
+            <column name="a_bpartner_id" value="0ae17c52-2054-11e8-86b2-b8763f88c3e3"/>
+            <column name="a_bpartner_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="MGT0002"/>
+            <column name="name" value="Kunal Sings"/>
+            <column name="description" value="A continuous learner, avid writer and amateur illustrator who is an artist by nature and technology enthusiast by profession."/>
+            <column name="taxid" value="00110013412-IN"/>
+            <column name="bptype" value="E"/>
+            <column name="datejoined" value="2016-05-17"/>
+        </insert>
+        <insert tableName="a_bpartner">
+            <column name="a_bpartner_id" value="0b329632-2054-11e8-a574-b8763f88c3e3"/>
+            <column name="a_bpartner_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="DEV0001"/>
+            <column name="name" value="Onn Khairuddin"/>
+            <column name="description" value="Block or report user"/>
+            <column name="taxid" value="00110013412-MY"/>
+            <column name="bptype" value="E"/>
+            <column name="datejoined" value="2015-05-17"/>
+        </insert>
+        <insert tableName="a_bpartner">
+            <column name="a_bpartner_id" value="0bbdeb56-2054-11e8-bfcb-b8763f88c3e3"/>
+            <column name="a_bpartner_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="DEV0002"/>
+            <column name="name" value="Michael Heinrichs"/>
+            <column name="description" value="Canoo Engineering AG"/>
+            <column name="taxid" value="09910013412-GM"/>
+            <column name="bptype" value="E"/>
+            <column name="datejoined" value="2014-05-17"/>
+        </insert>
+        <insert tableName="a_bpartner">
+            <column name="a_bpartner_id" value="0c8970c8-2054-11e8-88f9-b8763f88c3e3"/>
+            <column name="a_bpartner_category_id" value="${defaultSystemId}"/>
+            <column name="createdby" value="${defaultSystemId}"/>
+            <column name="updatedby" value="${defaultSystemId}"/>
+            <column name="value" value="MGT0001"/>
+            <column name="name" value="Kevin Feige"/>
+            <column name="description" value="Producer"/>
+            <column name="taxid" value="00110013412-0G"/>
+            <column name="bptype" value="E"/>
+            <column name="datejoined" value="2013-05-17"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet id="constraint_0" author="onn">
+        <addForeignKeyConstraint constraintName="fk_product_productcategory"
+                                 baseColumnNames="a_product_category_id"
+                                 baseTableName="a_product"
+                                 referencedColumnNames="a_product_category_id"
+                                 referencedTableName="a_product_category"/>
+
+        <addForeignKeyConstraint constraintName="fk_product_taxcategory"
+                                 baseColumnNames="a_tax_category_id"
+                                 baseTableName="a_product"
+                                 referencedColumnNames="a_tax_category_id"
+                                 referencedTableName="a_tax_category"/>
+
+        <addForeignKeyConstraint constraintName="fk_tax_taxcategory"
+                                 baseColumnNames="a_tax_category_id"
+                                 baseTableName="a_tax"
+                                 referencedColumnNames="a_tax_category_id"
+                                 referencedTableName="a_tax_category"/>
+
+        <addForeignKeyConstraint constraintName="fk_bpartner_bpartnercategory"
+                                 baseColumnNames="a_bpartner_category_id"
+                                 baseTableName="a_bpartner"
+                                 referencedColumnNames="a_bpartner_category_id"
+                                 referencedTableName="a_bpartner_category"/>
+
+        <addForeignKeyConstraint constraintName="fk_worksheetline_worksheet"
+                                 baseColumnNames="c_worksheet_id"
+                                 baseTableName="c_worksheet_line"
+                                 referencedColumnNames="c_worksheet_id"
+                                 referencedTableName="c_worksheet"/>
+
+
+    </changeSet>
+
+    <!--    BUSINESS LOGIC KEYS : Unique combination of attributes that is not going to change during object
+    or (at least session) lifetime -->
+    <changeSet id="logickey_0" author="onn" >
+        <addUniqueConstraint constraintName="employeepayrollelement_logickey"
+                             columnNames="a_payroll_element_id, a_bpartner_id, valid_from"
+                             deferrable="true"
+                             initiallyDeferred="true"
+                             tableName="a_employee_payroll_element"/>
+    </changeSet>
+</databaseChangeLog>
