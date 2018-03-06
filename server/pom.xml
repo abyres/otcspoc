@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.abyres.tm</groupId>
-    <artifactId>otcs</artifactId>
+    <artifactId>otcs-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>otcs</name>
+    <name>OTCS-Server</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
