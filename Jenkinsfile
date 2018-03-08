@@ -1,6 +1,6 @@
 node('maven') {
   stage('Build App') {
-    git url: "https://github.com/abyres/otcspoc"
+    git url: "https://github.com/abyres/otcspoc", branch: 'master'
   }
   stage('Build Image') {
     sh "oc start-build otcs --from-file=server/target/otcs-server-0.0.1-SNAPSHOT.jar --follow"
