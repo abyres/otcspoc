@@ -1,10 +1,11 @@
 node('maven') {
   stage('Build App') {
     git url: "https://github.com/abyres/otcspoc", branch: 'master'
+    sh "mvn compile"
   }
   stage('Build Image') {
     sh "tree"
-    sh "oc start-build otcs --from-file=server/target/otcs-server-0.0.1-SNAPSHOT.jar --follow"
+    sh "oc start-build otcs --from-file=server/target/otcs-server.jar --follow"
   }
   stage('Deploy') {
     openshiftDeploy depCfg: 'otcs'
@@ -13,7 +14,7 @@ node('maven') {
 
   def tag="blue"
   def altTag="green"
-  
+
   stage('Promote') {
     sh "oc get route otcs -n prod -o jsonpath='{ .spec.to.name }' > activeservice"
     activeService = readFile('activeservice').trim()
