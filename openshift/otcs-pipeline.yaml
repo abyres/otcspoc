@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: List
+metadata: {}
+items:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      pipeline.alpha.openshift.io/uses: '[{"name": "otcs", "namespace": "", "kind": "DeploymentConfig"}]'
+    name: otcs-service-pipeline
+  spec:
+    source:
+      git:
+        ref: pipeline
+        uri: https://github.com/abyres/otcspoc
+      type: Git
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: Jenkinsfile
+
