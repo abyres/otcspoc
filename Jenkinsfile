@@ -1,6 +1,10 @@
 node('maven') {
   stage('Build App') {
+    jdk = tool name: "OracleJDK8"
+    env.JAVA_HOME = "${jdk}"
     git url: "https://github.com/abyres/otcspoc", branch: 'master'
+
+    echo "jdk installation path is: ${jdk}"
     sh "mvn compile"
   }
   stage('Build Image') {
