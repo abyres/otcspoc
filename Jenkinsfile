@@ -5,7 +5,7 @@ node('maven') {
     git url: "https://github.com/abyres/otcspoc", branch: 'master'
 
     echo "jdk installation path is: ${jdk}"
-    sh "mvn compile"
+    sh "mvn package"
   }
   stage('Build Image') {
     sh "tree"
