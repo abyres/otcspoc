@@ -1,6 +1,6 @@
 node('maven') {
   stage('Build App') {
-    # Ensure Jenkins has been configured with latest Oracle JDK 8
+    // Ensure Jenkins has been configured with latest Oracle JDK 8
     jdk = tool name: "OracleJDK8"
     env.JAVA_HOME = "${jdk}"
     git url: "https://github.com/abyres/otcspoc", branch: 'master'
