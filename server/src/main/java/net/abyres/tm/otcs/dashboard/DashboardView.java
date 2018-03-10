@@ -23,6 +23,7 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -45,36 +46,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringView(name = DashboardView.VIEW_NAME)
 public class DashboardView extends VerticalLayout implements View {
 
-    public static final String VIEW_NAME = "Dashboard View";
+    public static final String VIEW_NAME = "Dashboard";
 
     private static final Logger logger = Logger.getLogger(DashboardView.class.getName());
-
-    @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private EmployeePayrollService employeePayrollService;
-    @Autowired
-    EntityManager entityManager; // not good to have entity manager here
-
-    private Employee theEmployee = null;
-    private Boolean isDirty = Boolean.FALSE;
-
-    List<Employee> tableViewExplorerData = new ArrayList<>();
-
-    private Grid<Employee> tableViewExplorer;
-    private TextField textFieldRecordId;
-    private TextField textFieldValue;
-    private TextField textFieldName;
-    private ComboBox<BusinessPartnerCategory> comboBoxCategory;
-    private TextArea textAreaDescription;
-    private DateField dateJoined;
-    private TextField textFieldSearch;
-    private Button buttonSave;
-    private Button buttonCreate;
-    private Grid<EmployeePayrollElement> tableViewIncome;
-    private Grid<EmployeePayrollElement> tableViewDeduction;
-    private VerticalLayout tabPayrollInfo;
-    private TabSheet tabSheet;
 
     public DashboardView() {
 
@@ -82,9 +56,22 @@ public class DashboardView extends VerticalLayout implements View {
 
     // Header
     private Component header() {
-        buttonSave = new Button("Save", VaadinIcons.DISC);
-        buttonCreate = new Button("New", VaadinIcons.STAR);
-        HorizontalLayout layout = new HorizontalLayout(buttonSave, buttonCreate);
+
+        Panel panel1 = new Panel("Overtime Slot");
+        panel1.setWidth("250px");
+        panel1.setHeight("200px");
+        Panel panel2 = new Panel("Overtime Request");
+        panel2.setWidth("250px");
+        panel2.setHeight("200px");
+        Panel panel3 = new Panel("Overtime Approved");
+        panel3.setWidth("250px");
+        panel3.setHeight("200px");
+        Panel panel4 = new Panel("Shortfall");
+        panel4.setWidth("250px");
+        panel4.setHeight("200px");
+
+
+        HorizontalLayout layout = new HorizontalLayout(panel1, panel2, panel3, panel4);
         return layout;
     }
 
@@ -102,7 +89,9 @@ public class DashboardView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeEvent event) {
-        addComponent(new Label("Employee View"));
+        Label title = new Label("Dashboard");
+        title.setStyleName("h1");
+        addComponent(title);
         addComponent(header());
         addComponent(body());
 //        addComponent(footer());
