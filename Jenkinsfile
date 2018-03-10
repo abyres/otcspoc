@@ -4,7 +4,7 @@ node('maven') {
     jdk = tool name: "OracleJDK8"
     env.JAVA_HOME = "${jdk}"
     echo "Using : ${jdk}"
-    git url: "https://github.com/abyres/otcspoc", branch: 'master'
+    git url: "http://gogs-cicd.192.168.99.100.nip.io/xeonn/otcspoc", branch: 'master'
   }
   stage('Build') {
     sh "mvn package -Dmaven.test.skip=true"
