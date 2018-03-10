@@ -5,7 +5,7 @@ node('maven') {
   stage('Build') {
     sh "${mvnHome}/bin/mvn compile -Dmaven.test.skip=true
   }
-  stage('Package')
+  stage('Package') {
     sh "${mvnHome}/bin/mvn package -Dmaven.test.skip=true
   }
   stage('Deploy') {
