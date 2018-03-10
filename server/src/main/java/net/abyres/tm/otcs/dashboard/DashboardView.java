@@ -142,6 +142,7 @@ public class DashboardView extends VerticalLayout implements View {
 
         ChartJs chart = new ChartJs(config);
         chart.setJsLoggingEnabled(true);
+        chart.setWidth("400px");
 //        chart.addClickListener((a, b)
 //                -> DemoUtils.notification(a, b, config.data().getDatasets().get(a)));
         return chart;
