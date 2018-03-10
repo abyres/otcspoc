@@ -5,6 +5,11 @@
  */
 package net.abyres.tm.otcs.dashboard;
 
+import com.byteowls.vaadin.chartjs.ChartJs;
+import com.byteowls.vaadin.chartjs.config.RadarChartConfig;
+import com.byteowls.vaadin.chartjs.data.Dataset;
+import com.byteowls.vaadin.chartjs.data.RadarDataset;
+import com.byteowls.vaadin.chartjs.options.scale.RadialLinearScale;
 import net.abyres.tm.otcs.employee.*;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -22,7 +27,6 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,16 +34,6 @@ import javax.persistence.EntityManager;
 import net.abyres.tm.otcs.model.BusinessPartnerCategory;
 import net.abyres.tm.otcs.model.Employee;
 import net.abyres.tm.otcs.model.EmployeePayrollElement;
-import org.dussan.vaadin.dcharts.DCharts;
-import org.dussan.vaadin.dcharts.base.elements.XYaxis;
-import org.dussan.vaadin.dcharts.data.DataSeries;
-import org.dussan.vaadin.dcharts.data.Ticks;
-import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
-import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
-import org.dussan.vaadin.dcharts.options.Axes;
-import org.dussan.vaadin.dcharts.options.Highlighter;
-import org.dussan.vaadin.dcharts.options.Options;
-import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -97,18 +91,7 @@ public class DashboardView extends VerticalLayout implements View {
     // Body
     private Component body() {
 
-        tabSheet = new TabSheet();
-        tabSheet.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
-            @Override
-            public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {
-                com.vaadin.ui.JavaScript
-                        .eval("setTimeout(function(){prettyPrint();},300);");
-            }
-        });
-        tabSheet.setSizeFull();
-        tabSheet.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
-
-        HorizontalLayout layout = new HorizontalLayout(tabSheet);
+        HorizontalLayout layout = new HorizontalLayout(radarSkippePoint());
         return layout;
     }
     // Footer
@@ -125,48 +108,55 @@ public class DashboardView extends VerticalLayout implements View {
 //        addComponent(footer());
     }
 
-    /**
-     * Updates main tabSheet
-     * <p>
-     * Adds one tab with one example instance, one with the java source and
-     * another one with html source in case of declarative example
-     *
-     * @param chartExample
-     */
-    private void updateTabSheet(Class chartExample) {
-        try {
-            tabSheet.removeAllComponents();
+    private Component radarSkippePoint() {
+        RadarChartConfig config = new RadarChartConfig();
+        config
+                .data()
+                .labels("Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running")
+                .addDataset(new RadarDataset().label("Skip first dataset").borderColor("rgb(255, 0, 0)")
+                        .backgroundColor("rgba(255,255,0,0.5)").pointBackgroundColor("rgba(220,220,220,1)"))
+                .addDataset(new RadarDataset().label("Skip mid dataset").borderColor("rgb(255, 0, 255)")
+                        .backgroundColor("rgba(0, 255, 0, 0.5)").pointBackgroundColor("rgba(151,187,205,1)").pointHoverBackgroundColor("#fff"))
+                .addDataset(new RadarDataset().label("Skip last dataset").borderColor("rgb(0, 255, 255)")
+                        .backgroundColor("rgba(0, 0, 255, 0.5)").pointBackgroundColor("rgba(151,187,205,1)").pointHoverBackgroundColor("#fff"))
+                .and();
 
-            DataSeries dataSeries = new DataSeries()
-                    .add(2, 6, 7, 10);
+        config.
+                options()
+                .title()
+                .display(true)
+                .text("Chart.js Radar Chart - Skip Points")
+                .and()
+                .elements()
+                .line()
+                .tension(0.0)
+                .and()
+                .and()
+                .scale(new RadialLinearScale().ticks().beginAtZero(true).and().reverse(false))
+                .done();
 
-            SeriesDefaults seriesDefaults = new SeriesDefaults()
-                    .setRenderer(SeriesRenderers.BAR);
-
-            Axes axes = new Axes()
-                    .addAxis(
-                            new XYaxis()
-                                    .setRenderer(AxisRenderers.CATEGORY)
-                                    .setTicks(
-                                            new Ticks()
-                                                    .add("a", "b", "c", "d")));
-
-            Highlighter highlighter = new Highlighter()
-                    .setShow(false);
-
-            Options options = new Options()
-                    .setSeriesDefaults(seriesDefaults)
-                    .setAxes(axes)
-                    .setHighlighter(highlighter);
-
-            DCharts chart = new DCharts()
-                    .setDataSeries(dataSeries)
-                    .setOptions(options)
-                    .show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<String> labels = config.data().getLabels();
+        int cnt = 0;
+        for (Dataset<?, ?> ds : config.data().getDatasets()) {
+            RadarDataset lds = (RadarDataset) ds;
+            List<Double> data = new ArrayList<>();
+            for (int i = 0; i < labels.size(); i++) {
+                if ((cnt == 0 && i == 0) || (cnt == 1 && i == 3) || (cnt == 2 && i == 6)) {
+                    data.add(Double.NaN);
+                } else {
+                    data.add((double) (Math.round(Math.random() * 100)));
+                }
+            }
+            lds.dataAsList(data);
+            cnt++;
         }
+
+        ChartJs chart = new ChartJs(config);
+        chart.setJsLoggingEnabled(true);
+//        chart.addClickListener((a, b)
+//                -> DemoUtils.notification(a, b, config.data().getDatasets().get(a)));
+        return chart;
+
     }
 
 }
