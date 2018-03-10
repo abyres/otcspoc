@@ -16,13 +16,13 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,6 +30,16 @@ import javax.persistence.EntityManager;
 import net.abyres.tm.otcs.model.BusinessPartnerCategory;
 import net.abyres.tm.otcs.model.Employee;
 import net.abyres.tm.otcs.model.EmployeePayrollElement;
+import org.dussan.vaadin.dcharts.DCharts;
+import org.dussan.vaadin.dcharts.base.elements.XYaxis;
+import org.dussan.vaadin.dcharts.data.DataSeries;
+import org.dussan.vaadin.dcharts.data.Ticks;
+import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
+import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
+import org.dussan.vaadin.dcharts.options.Axes;
+import org.dussan.vaadin.dcharts.options.Highlighter;
+import org.dussan.vaadin.dcharts.options.Options;
+import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -70,9 +80,9 @@ public class DashboardView extends VerticalLayout implements View {
     private Grid<EmployeePayrollElement> tableViewIncome;
     private Grid<EmployeePayrollElement> tableViewDeduction;
     private VerticalLayout tabPayrollInfo;
+    private TabSheet tabSheet;
 
     public DashboardView() {
-
 
     }
 
@@ -83,39 +93,22 @@ public class DashboardView extends VerticalLayout implements View {
         HorizontalLayout layout = new HorizontalLayout(buttonSave, buttonCreate);
         return layout;
     }
+
     // Body
     private Component body() {
 
-        textFieldRecordId = new TextField("Record ID");
-        textFieldValue = new TextField("Code");
-        textFieldName = new TextField("Name");
-        comboBoxCategory = new ComboBox<>("Category");
-        textAreaDescription = new TextArea("Description");
-        dateJoined = new DateField("Joined");
+        tabSheet = new TabSheet();
+        tabSheet.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
+            @Override
+            public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {
+                com.vaadin.ui.JavaScript
+                        .eval("setTimeout(function(){prettyPrint();},300);");
+            }
+        });
+        tabSheet.setSizeFull();
+        tabSheet.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
 
-
-        // Create form
-        Panel pnl = new Panel("Employee Information");
-        GridLayout formPane = new GridLayout(2, 7);
-        formPane.setWidth("400px");
-        formPane.setMargin(true);
-        formPane.addComponent(textFieldRecordId, 0, 0);
-        formPane.addComponent(textFieldValue, 0, 1);
-        formPane.addComponent(textFieldName, 0, 2, 1, 2);
-        formPane.addComponent(comboBoxCategory, 0, 3);
-        formPane.addComponent(textAreaDescription, 0, 4, 1, 5);
-        formPane.addComponent(dateJoined, 0, 6);
-        pnl.setContent(formPane);
-
-        tableViewExplorer = new Grid<>("Registered Employee");
-        /*Retrieving employee data*/
-        tableViewExplorer.setItems(employeeService.getAllEmployee());
-        tableViewExplorer.addColumn(Employee::getValue).setCaption("No.");
-        tableViewExplorer.addColumn(Employee::getName).setCaption("Name");
-
-        textFieldSearch = new TextField("Search");
-        VerticalLayout explorerPane = new VerticalLayout(textFieldSearch, tableViewExplorer);
-        HorizontalLayout layout = new HorizontalLayout(explorerPane, pnl);
+        HorizontalLayout layout = new HorizontalLayout(tabSheet);
         return layout;
     }
     // Footer
@@ -130,6 +123,50 @@ public class DashboardView extends VerticalLayout implements View {
         addComponent(header());
         addComponent(body());
 //        addComponent(footer());
+    }
+
+    /**
+     * Updates main tabSheet
+     * <p>
+     * Adds one tab with one example instance, one with the java source and
+     * another one with html source in case of declarative example
+     *
+     * @param chartExample
+     */
+    private void updateTabSheet(Class chartExample) {
+        try {
+            tabSheet.removeAllComponents();
+
+            DataSeries dataSeries = new DataSeries()
+                    .add(2, 6, 7, 10);
+
+            SeriesDefaults seriesDefaults = new SeriesDefaults()
+                    .setRenderer(SeriesRenderers.BAR);
+
+            Axes axes = new Axes()
+                    .addAxis(
+                            new XYaxis()
+                                    .setRenderer(AxisRenderers.CATEGORY)
+                                    .setTicks(
+                                            new Ticks()
+                                                    .add("a", "b", "c", "d")));
+
+            Highlighter highlighter = new Highlighter()
+                    .setShow(false);
+
+            Options options = new Options()
+                    .setSeriesDefaults(seriesDefaults)
+                    .setAxes(axes)
+                    .setHighlighter(highlighter);
+
+            DCharts chart = new DCharts()
+                    .setDataSeries(dataSeries)
+                    .setOptions(options)
+                    .show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

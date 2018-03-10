@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringView(name = EmployeeView.VIEW_NAME)
 public class EmployeeView extends VerticalLayout implements View {
 
-    public static final String VIEW_NAME = "Employee View";
+    public static final String VIEW_NAME = "Employee";
 
     private static final Logger logger = Logger.getLogger(EmployeeView.class.getName());
 

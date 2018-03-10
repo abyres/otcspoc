@@ -12,6 +12,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import net.abyres.tm.otcs.dashboard.DashboardView;
 import net.abyres.tm.otcs.employee.EmployeeView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.teemusa.sidemenu.SideMenu;
@@ -29,6 +30,8 @@ public class MainUI extends UI {
 
     @Autowired
     EmployeeView employeeView;
+    @Autowired
+    DashboardView dashboardView;
 
     @Override
     protected void init(VaadinRequest request) {
@@ -36,11 +39,16 @@ public class MainUI extends UI {
         Navigator navigator = new Navigator(this, sideMenu);
         setNavigator(navigator);
 
-        navigator.addView("", employeeView);
+        navigator.addView("", dashboardView);
         navigator.navigateTo("");
 
         sideMenu.setMenuCaption(menuCaption);
-        sideMenu.addNavigation("Employee Management", "");
+        sideMenu.addNavigation("Dashboard", "");
+        sideMenu.addMenuItem(DashboardView.VIEW_NAME, VaadinIcons.HOME, () -> {
+            sideMenu.setContent(dashboardView);
+        });
+
+        sideMenu.addNavigation("Employee Management", EmployeeView.VIEW_NAME);
         sideMenu.addMenuItem(EmployeeView.VIEW_NAME, VaadinIcons.USERS, () -> {
             sideMenu.setContent(employeeView);
         });
