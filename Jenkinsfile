@@ -1,10 +1,9 @@
 node('maven') {
   stage('Build App') {
     git url: "https://github.com/abyres/otcspoc", branch: 'master'
-    sh "oc new-app -e APP_OPTIONS="Dspring.profiles.active=server" -e APP_SUFFIX=otcs-server xeonn/s2i-java~https://github.com/abyres/otcspoc "
+    sh "oc new-build -n dev --strategy docker --binary --name otcs-server"
   }
   stage('Deploy') {
-    openshiftDeploy depCfg: 'otcs-server'
-    openshiftVerifyDeployment depCfg: 'otcs-server', replicaCount: 1, verifyReplicaCount: true
+    sh "oc start-build -n dev otcs-server --from-dir . --follow
   }
 }
