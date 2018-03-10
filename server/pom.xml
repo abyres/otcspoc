@@ -23,6 +23,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <vaadin.version>8.3.0</vaadin.version>
+
+        <!--Tests are by default skipped. Add "-Dmaven.test.skip=false" at cli to enable them.-->
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <repositories>
@@ -31,6 +34,13 @@
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>openshift-nexus-snapshot</id>
+            <url>http://nexus-cicd.192.168.99.100.nip.io/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -65,7 +75,7 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>-->
@@ -123,9 +133,35 @@
 
     <build>
         <plugins>
+
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--Disable existing maven plugin-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <serverId>openshift-nexus</serverId>
+                    <nexusUrl>http://nexus-cicd.192.168.99.100.nip.io/nexus</nexusUrl>
+                    <skipLocalStaging>true</skipLocalStaging>
+                    <skipStaging>true</skipStaging>
+                </configuration>
             </plugin>
         </plugins>
         <finalName>otcs-server</finalName>
