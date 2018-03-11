@@ -6,10 +6,17 @@
 package net.abyres.tm.otcs.dashboard;
 
 import com.byteowls.vaadin.chartjs.ChartJs;
+import com.byteowls.vaadin.chartjs.config.BarChartConfig;
 import com.byteowls.vaadin.chartjs.config.RadarChartConfig;
+import com.byteowls.vaadin.chartjs.data.BarDataset;
 import com.byteowls.vaadin.chartjs.data.Dataset;
 import com.byteowls.vaadin.chartjs.data.RadarDataset;
+import com.byteowls.vaadin.chartjs.options.InteractionMode;
+import com.byteowls.vaadin.chartjs.options.Position;
+import com.byteowls.vaadin.chartjs.options.scale.Axis;
+import com.byteowls.vaadin.chartjs.options.scale.LinearScale;
 import com.byteowls.vaadin.chartjs.options.scale.RadialLinearScale;
+import com.byteowls.vaadin.chartjs.utils.ColorUtils;
 import net.abyres.tm.otcs.employee.*;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -60,6 +67,9 @@ public class DashboardView extends VerticalLayout implements View {
         Panel panel1 = new Panel("Overtime Slot");
         panel1.setWidth("250px");
         panel1.setHeight("170px");
+        panel1.setContent(getOvertimeSlotChart());
+
+
         Panel panel2 = new Panel("Overtime Request");
         panel2.setWidth("250px");
         panel2.setHeight("170px");
@@ -142,10 +152,51 @@ public class DashboardView extends VerticalLayout implements View {
         ChartJs chart = new ChartJs(config);
         chart.setJsLoggingEnabled(true);
         chart.setWidth("400px");
-//        chart.addClickListener((a, b)
-//                -> DemoUtils.notification(a, b, config.data().getDatasets().get(a)));
         return chart;
-
     }
+
+    private Component getOvertimeSlotChart() {
+        BarChartConfig barConfig = new BarChartConfig();
+        barConfig.
+            data()
+                .labels("Offer", "Accept")
+                .addDataset(
+                        new BarDataset().backgroundColor("rgba(220,220,220,0.5)").label("Dataset 1").yAxisID("y-axis-1"))
+                .addDataset(
+                        new BarDataset().backgroundColor("rgba(151,187,205,0.5)").label("Dataset 2").yAxisID("y-axis-2"))
+                .and();
+        barConfig.
+            options()
+                .responsive(true)
+                .hover()
+                    .mode(InteractionMode.INDEX)
+                    .intersect(true)
+                    .animationDuration(400)
+                    .and()
+                .title()
+                    .display(true)
+                    .and()
+                .scales()
+                    .add(Axis.Y, new LinearScale().display(true).position(Position.LEFT).id("y-axis-1"))
+                    .add(Axis.Y, new LinearScale().display(true).position(Position.RIGHT).id("y-axis-2").gridLines().drawOnChartArea(false).and())
+                    .and()
+               .done();
+
+        List<String> labels = barConfig.data().getLabels();
+        for (Dataset<?, ?> ds : barConfig.data().getDatasets()) {
+            BarDataset lds = (BarDataset) ds;
+            List<Double> data = new ArrayList<>();
+            for (int i = 0; i < labels.size(); i++) {
+                data.add((Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100));
+            }
+            lds.dataAsList(data);
+        }
+
+        ChartJs chart = new ChartJs(barConfig);
+        chart.setJsLoggingEnabled(true);
+        return chart;
+    }
+
+
 
 }
