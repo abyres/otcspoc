@@ -125,7 +125,9 @@ public class EmployeeView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeEvent event) {
-        addComponent(new Label("Employee View"));
+        Label title = new Label(VIEW_NAME);
+        title.setStyleName("h2");
+        addComponent(title);
         addComponent(header());
         addComponent(body());
 //        addComponent(footer());

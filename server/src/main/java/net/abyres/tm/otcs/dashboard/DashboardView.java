@@ -59,17 +59,16 @@ public class DashboardView extends VerticalLayout implements View {
 
         Panel panel1 = new Panel("Overtime Slot");
         panel1.setWidth("250px");
-        panel1.setHeight("200px");
+        panel1.setHeight("170px");
         Panel panel2 = new Panel("Overtime Request");
         panel2.setWidth("250px");
-        panel2.setHeight("200px");
+        panel2.setHeight("170px");
         Panel panel3 = new Panel("Overtime Approved");
         panel3.setWidth("250px");
-        panel3.setHeight("200px");
+        panel3.setHeight("170px");
         Panel panel4 = new Panel("Shortfall");
         panel4.setWidth("250px");
-        panel4.setHeight("200px");
-
+        panel4.setHeight("170px");
 
         HorizontalLayout layout = new HorizontalLayout(panel1, panel2, panel3, panel4);
         return layout;
@@ -90,7 +89,7 @@ public class DashboardView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeEvent event) {
         Label title = new Label("Dashboard");
-        title.setStyleName("h1");
+        title.setStyleName("h2");
         addComponent(title);
         addComponent(header());
         addComponent(body());

@@ -39,21 +39,14 @@ public class MainUI extends UI {
         Navigator navigator = new Navigator(this, sideMenu);
         setNavigator(navigator);
 
-        navigator.addView("", dashboardView);
-        navigator.navigateTo("");
-
         sideMenu.setMenuCaption(menuCaption);
-        sideMenu.addNavigation("Dashboard", "");
-        sideMenu.addMenuItem(DashboardView.VIEW_NAME, VaadinIcons.HOME, () -> {
-            sideMenu.setContent(dashboardView);
-        });
 
-        sideMenu.addNavigation("Employee Management", EmployeeView.VIEW_NAME);
-        sideMenu.addMenuItem(EmployeeView.VIEW_NAME, VaadinIcons.USERS, () -> {
-            sideMenu.setContent(employeeView);
-        });
+        navigator.addView("", dashboardView);
+        sideMenu.addNavigation("Dashboard", VaadinIcons.HOME, "");
 
-        sideMenu.addNavigation("Overtime Management", "");
+        navigator.addView(EmployeeView.VIEW_NAME, employeeView);
+        sideMenu.addNavigation("Employee", VaadinIcons.USERS, EmployeeView.VIEW_NAME);
+
         // Arbitrary method execution
         sideMenu.addMenuItem("Overtime Element", VaadinIcons.STOCK, () -> {
             VerticalLayout content = new VerticalLayout();
@@ -69,6 +62,8 @@ public class MainUI extends UI {
             VerticalLayout content = new VerticalLayout();
             content.addComponent(new Label("Report View"));
             sideMenu.setContent(content);
-        }).select();
+        });
+
+        navigator.navigateTo("");
     }
 }
