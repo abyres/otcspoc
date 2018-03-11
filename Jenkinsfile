@@ -24,8 +24,9 @@ node('maven') {
   }
   stage('Rollout Beta Image') {
     echo "Rolling out to STAGE environment."
-    sh "oc start-build -n stage otcs-server --from-dir . --follow"
+//    sh "oc start-build -n stage otcs-server --from-dir . --follow"
     sh "oc tag stage/otcs-server:latest stage/otcs-server:blue"
+    sh "oc set route-backends otcs-server stage/otcs-server:blue=2 dev/otcs-server:latest=0 -n stage"
   }
   stage('Approve Go Live') {
     timeout(time:15, unit:'MINUTES') {
