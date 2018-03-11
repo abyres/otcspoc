@@ -12,6 +12,13 @@
         <java.version>1.8</java.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>openshift-nexus-mirror</id>
+            <url>http://nexus-cicd.192.168.99.100.nip.io/nexus/content/repositories/apache-snapshots/</url>
+        </repository>
+    </repositories>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>

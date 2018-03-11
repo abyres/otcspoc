@@ -30,6 +30,15 @@
 
     <repositories>
         <repository>
+            <id>openshift-nexus-mirror</id>
+            <url>http://nexus-cicd.192.168.99.100.nip.io/nexus/content/repositories/apache-snapshots/</url>
+        </repository>
+        <repository>
+            <id>spring-io</id>
+            <url>http://nexus-cicd.192.168.99.100.nip.io/nexus/content/repositories/spring/</url>
+        </repository>
+
+        <repository>
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
