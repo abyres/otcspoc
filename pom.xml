@@ -8,7 +8,6 @@
     <modules>
         <module>./server</module>
         <module>./model</module>
-        <module>otcs-att</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
