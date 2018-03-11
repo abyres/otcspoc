@@ -11,15 +11,15 @@ apply plugin: 'org.javafxports.jfxmobile'
 
 repositories {
     jcenter()
-    maven {
-        url 'http://nexus-cicd.192.168.99.100.nip.io/nexus/content/repositories/gluonhq'
-    }
+    maven { url 'http://nexus-cicd.192.168.99.100.nip.io/nexus/content/repositories/gluonhq' }
+    maven { url 'http://nexus-cicd.192.168.99.100.nip.io/nexus/content/repositories/snapshots/' }
 }
 
 mainClassName = 'net.abyres.tm.Mobile'
 
 dependencies {
     compile 'com.gluonhq:charm:4.4.1'
+    compile 'net.abyres.tm:model:1.0-SNAPSHOT'
 }
 
 jfxmobile {
