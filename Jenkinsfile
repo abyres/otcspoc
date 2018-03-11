@@ -12,6 +12,8 @@ node('maven') {
   stage('Dev Image') {
     // sh "oc new-build -n dev --strategy docker --binary --name otcs-server"
     sh "oc start-build -n dev otcs-server --from-dir . --follow"
+    openshiftDeploy depCfg: 'otcs-server'
+    openshiftVerifyDeployment deploymentConfig: "otcs-server", replicaCount: '1', verifyReplicaCount: true, namespace: 'dev'
   }
   stage('Code Quality') {
     sh "echo \"Code quality check successful\""
