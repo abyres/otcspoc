@@ -9,11 +9,10 @@ node('maven') {
   stage('Build') {
     sh "mvn package -Dmaven.test.skip=true"
   }
-  stage('Dev Image') {
-    // sh "oc new-build -n dev --strategy docker --binary --name otcs-server"
+  stage('Rollout Dev Image') {
+    echo "Rolling out to DEVELOPMENT environment."
     sh "oc start-build -n dev otcs-server --from-dir . --follow"
-    openshiftDeploy depCfg: 'otcs-server'
-    openshiftVerifyDeployment deploymentConfig: "otcs-server", replicaCount: '1', verifyReplicaCount: true, namespace: 'dev'
+    sh "oc -n dev rollout latest otcs-server
   }
   stage('Code Quality') {
     sh "echo \"Code quality check successful\""
@@ -24,9 +23,11 @@ node('maven') {
   stage('Integration Test') {
     sh "echo \"All integration test successful\""
   }
-  stage('Staging') {
-    openshiftTag sourceStream: 'otcs-server', sourceTag: 'latest', namespace: 'dev', destinationStream: 'otcs-server', destinationTag: "blue",   destinationNamespace: 'stage'
-    openshiftVerifyDeployment deploymentConfig: "otcs-server", replicaCount: '1', verifyReplicaCount: true, namespace: 'stage'
+  stage('Rollout Beta Image') {
+    echo "Rolling out to STAGE environment."
+    sh "oc start-build -n stage otcs-server --from-dir . --follow"
+    sh "oc -n stage rollout latest otcs-server
+    sh "oc tag stage/otcs-server:latest stage/otcs-server:blue"
   }
   stage('Approve Go Live') {
     timeout(time:15, unit:'MINUTES') {
@@ -35,8 +36,8 @@ node('maven') {
   }
 
   stage('Go Live') {
-    openshiftTag sourceStream: 'otcs-server', sourceTag: 'blue', namespace: 'stage', destinationStream: 'otcs-server', destinationTag: "green",   destinationNamespace: 'prod'
-    openshiftVerifyDeployment deploymentConfig: "otcs-server", replicaCount: '1', verifyReplicaCount: true, namespace: 'prod'
-//    sh "oc set route-backends otcs-server cart-${tag}=100 cart-${altTag}=0 -n prod"
+    echo "Rolling out to PRODUCTION environment."
+    sh "oc tag stage/otcs-server:blue prod/otcs-server:green"    
+    sh "oc set route-backends otcs-server prod/otcs-server:green=2 stage/otcs-server:blue=0 -n prod"
   }
 }
