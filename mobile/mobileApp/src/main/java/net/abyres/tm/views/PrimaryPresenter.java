@@ -2,6 +2,7 @@ package net.abyres.tm.views;
 
 import com.gluonhq.charm.glisten.application.MobileApplication;
 import com.gluonhq.charm.glisten.control.AppBar;
+import com.gluonhq.charm.glisten.control.CharmListView;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import net.abyres.tm.Mobile;
@@ -15,23 +16,25 @@ public class PrimaryPresenter {
 
     @FXML
     private Label label;
+    @FXML
+    private CharmListView<?, ? extends Comparable> listView;
 
     public void initialize() {
         primary.showingProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
                 AppBar appBar = MobileApplication.getInstance().getAppBar();
-                appBar.setNavIcon(MaterialDesignIcon.MENU.button(e -> 
+                appBar.setNavIcon(MaterialDesignIcon.MENU.button(e ->
                         MobileApplication.getInstance().showLayer(Mobile.MENU_LAYER)));
                 appBar.setTitleText("Primary");
-                appBar.getActionItems().add(MaterialDesignIcon.SEARCH.button(e -> 
+                appBar.getActionItems().add(MaterialDesignIcon.SEARCH.button(e ->
                         System.out.println("Search")));
             }
         });
     }
-    
+
     @FXML
     void buttonClick() {
         label.setText("Hello JavaFX Universe!");
     }
-    
+
 }
