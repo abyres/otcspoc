@@ -15,9 +15,11 @@ node('maven') {
         agent {
           label "Development"
         }
-        steps {
-          echo "Rolling out to DEVELOPMENT environment."
-          sh "oc start-build -n dev otcs-server --from-dir . --follow"
+        post {
+          always {
+            echo "Rolling out to DEVELOPMENT environment."
+            sh "oc start-build -n dev otcs-server --from-dir . --follow"
+          }
         }
       }
       stage('Rollout Beta Image') {
@@ -33,11 +35,13 @@ node('maven') {
         steps {
           sh "echo \"All integration test successful\""
         }
-        steps {
-          echo "Rolling out to STAGE environment."
-          sh "oc start-build -n stage otcs-server --from-dir . --follow"
-          // sh "oc -n stage rollout latest otcs-server"
-          sh "oc tag stage/otcs-server:latest stage/otcs-server:blue"
+        post {
+          always {
+            echo "Rolling out to STAGE environment."
+            sh "oc start-build -n stage otcs-server --from-dir . --follow"
+            // sh "oc -n stage rollout latest otcs-server"
+            sh "oc tag stage/otcs-server:latest stage/otcs-server:blue"
+          }
         }
       }
     }
@@ -51,7 +55,7 @@ node('maven') {
 
   stage('Go Live') {
     echo "Rolling out to PRODUCTION environment."
-    sh "oc tag stage/otcs-server:blue prod/otcs-server:green"    
+    sh "oc tag stage/otcs-server:blue prod/otcs-server:green"
     sh "oc set route-backends otcs-server prod/otcs-server:green=2 stage/otcs-server:blue=0 -n prod"
   }
 }
