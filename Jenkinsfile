@@ -9,44 +9,24 @@ node('maven') {
   stage('Build') {
     sh "mvn package -Dmaven.test.skip=true"
   }
-  stage('Rollout') {
-    parallel {
-      stage('Rollout Dev Image') {
-        agent {
-          label "Development"
-        }
-        post {
-          always {
-            echo "Rolling out to DEVELOPMENT environment."
-            sh "oc start-build -n dev otcs-server --from-dir . --follow"
-          }
-        }
-      }
-      stage('Rollout Beta Image') {
-        agent {
-          label "Staging"
-        }
-        steps {
-          sh "echo \"Code quality check successful\""
-        }
-        steps {
-          sh "echo \"All unit test successful\""
-        }
-        steps {
-          sh "echo \"All integration test successful\""
-        }
-        post {
-          always {
-            echo "Rolling out to STAGE environment."
-            sh "oc start-build -n stage otcs-server --from-dir . --follow"
-            // sh "oc -n stage rollout latest otcs-server"
-            sh "oc tag stage/otcs-server:latest stage/otcs-server:blue"
-          }
-        }
-      }
-    }
+  stage('Rollout Dev Image') {
+    echo "Rolling out to DEVELOPMENT environment."
+    sh "oc start-build -n dev otcs-server --from-dir . --follow"
   }
-
+  stage('Code Quality') {
+    sh "echo \"Code quality check successful\""
+  }
+  stage('Unit Test') {
+    sh "echo \"All unit test successful\""
+  }
+  stage('Integration Test') {
+    sh "echo \"All integration test successful\""
+  }
+  stage('Rollout Beta Image') {
+    echo "Rolling out to STAGE environment."
+    sh "oc start-build -n stage otcs-server --from-dir . --follow"
+    sh "oc tag stage/otcs-server:latest stage/otcs-server:blue"
+  }
   stage('Approve Go Live') {
     timeout(time:15, unit:'MINUTES') {
       input message:'Go Live in Prod?'
