@@ -30,6 +30,10 @@
 
     <repositories>
         <repository>
+            <id>openshift-nexus-otcs</id>
+            <url>http://nexus-cicd.192.168.99.100.nip.io/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
             <id>openshift-nexus-mirror</id>
             <url>http://nexus-cicd.192.168.99.100.nip.io/nexus/content/repositories/apache-snapshots/</url>
         </repository>

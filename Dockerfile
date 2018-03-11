@@ -85,7 +85,7 @@ LABEL io.k8s.description="Platform for retrieving SpringBoot Java applications T
 
 RUN mkdir -p /opt/app-root
 
-COPY server/target/otcs-server.jar ${APP_ROOT}/
+COPY server/target/otcs-server.jar ${APP_ROOT}/app.jar
 
 RUN adduser -u 1001 -h ${HOME} -S alpine && chown -R 1001:0 ${APP_ROOT} && chmod -R a+rwx ${APP_ROOT}
 USER 1001
@@ -95,5 +95,5 @@ USER 1001
 WORKDIR ${HOME}
 
 ENTRYPOINT ["/opt/jdk/bin/java"]
-CMD ["-jar", "-Dspring.profiles.active=server", "/opt/app-root/otcs-server.jar"]
+CMD ["-jar", "-Dspring.profiles.active=server", "/opt/app-root/app.jar"]
 EXPOSE 8080
