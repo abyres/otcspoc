@@ -1,0 +1,12 @@
+[submodule "otcs-att"]
+	path = otcs-att
+	url = https://github.com/abyres/otcs-att
+[submodule "otcs-sch"]
+	path = otcs-sch
+	url = https://github.com/abyres/otcs-sch
+[submodule "otcs-mdm"]
+	path = otcs-mdm
+	url = https://github.com/abyres/otcs-mdm
+[submodule "otcs-otm"]
+	path = otcs-otm
+	url = https://github.com/abyres/otcs-otm
