@@ -25,6 +25,7 @@ node('maven') {
   stage('Rollout Beta Image') {
     echo "Rolling out to STAGE environment."
     sh "oc tag -n stage dev/otcs-server:latest stage/otcs-server:blue"
+    sh "oc expose service otcspoc"
   }
 /*
   stage('Approve Go Live') {
